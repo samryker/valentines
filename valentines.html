@@ -2,131 +2,212 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Be My Valentine ❤️</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Be My Valentine ❤️</title>
+
   <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      font-family: "Segoe UI", sans-serif;
-      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
+    :root { --pink:#ff4d79; --deep:#e6005c; }
+
+    body{
+      margin:0; height:100vh;
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      display:flex; align-items:center; justify-content:center;
+      background: radial-gradient(circle at top, #ffe0ea 0%, #ff9a9e 35%, #fad0c4 100%);
+      overflow:hidden;
     }
 
-    .card {
-      background: white;
-      padding: 30px 40px;
-      border-radius: 20px;
-      text-align: center;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-      animation: pop 0.8s ease;
+    /* cinematic bars (VERY obvious) */
+    body::before, body::after{
+      content:"";
+      position:fixed; left:0; right:0;
+      height:10vh;
+      background: rgba(0,0,0,0.60);
+      opacity:0;
+      transition: opacity 300ms ease;
+      pointer-events:none;
+      z-index: 50;
+    }
+    body::before{ top:0; }
+    body::after{ bottom:0; }
+    body.cinema::before, body.cinema::after{ opacity:1; }
+
+    .card{
+      width:min(520px, 92vw);
+      background: rgba(255,255,255,0.92);
+      border-radius: 22px;
+      text-align:center;
+      padding: 28px 26px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+      position:relative;
+      z-index: 100;
+      animation: pop 600ms ease;
+    }
+    @keyframes pop{
+      from{ transform: translateY(16px) scale(0.95); opacity:0; }
+      to{ transform: translateY(0) scale(1); opacity:1; }
     }
 
-    @keyframes pop {
-      from { transform: scale(0.5); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
+    h1{ margin: 0 0 8px; color: var(--deep); font-size: 30px; }
+    p{ margin: 0 0 18px; color:#333; font-size: 16px; line-height:1.45; }
+
+    .filmTag{
+      display:inline-flex; gap:8px; align-items:center; justify-content:center;
+      padding: 8px 12px; border-radius: 999px;
+      background: rgba(0,0,0,0.08);
+      font-size: 13px; color:#111;
+      margin: 4px 0 18px;
+      user-select:none;
     }
 
-    h1 {
-      color: #e6005c;
-      margin-bottom: 10px;
-    }
-
-    p {
-      color: #444;
-      margin-bottom: 25px;
-    }
-
-    .buttons {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-    }
-
-    button {
+    .buttons{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+    button{
       font-size: 18px;
-      padding: 10px 25px;
-      border-radius: 30px;
-      border: none;
-      cursor: pointer;
-      transition: transform 0.2s ease;
+      padding: 12px 26px;
+      border-radius: 999px;
+      border:none; cursor:pointer;
+      box-shadow: 0 10px 22px rgba(0,0,0,0.12);
+      transition: transform .18s ease;
+    }
+    #yesBtn{ background: var(--pink); color:#fff; }
+    #yesBtn:hover{ transform: scale(1.06); }
+    #noBtn{ background:#e9e9e9; color:#111; position:relative; }
+
+    .hint{ margin-top: 14px; font-size: 12px; color: rgba(0,0,0,0.6); }
+
+    .badge{
+      display:inline-block;
+      margin-top: 14px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      background: rgba(0,0,0,0.08);
+      color: #111;
     }
 
-    #yesBtn {
-      background: #ff4d79;
-      color: white;
+    .imgWrap{ margin-top:18px; }
+    .yesImg{
+      width:100%;
+      max-height:360px;
+      object-fit:cover;
+      border-radius:16px;
+      box-shadow: 0 16px 34px rgba(0,0,0,0.22);
+      opacity:0;
+      transform: translateY(18px) scale(0.98);
+      animation: imgIn 700ms cubic-bezier(.2,.9,.2,1) forwards;
     }
+    @keyframes imgIn { to{ opacity:1; transform: translateY(0) scale(1); } }
 
-    #yesBtn:hover {
-      transform: scale(1.1);
-    }
+    .tagline{ margin: 14px 0 0; font-size: 18px; font-weight: 800; color:#111; }
+    .caption{ margin: 6px 0 0; font-size: 14px; color: rgba(0,0,0,0.78); line-height:1.45; }
 
-    #noBtn {
-      background: #ddd;
-      color: #333;
-      position: relative;
-    }
-
-    .hearts {
-      position: fixed;
-      bottom: -20px;
-      font-size: 24px;
+    .hearts{
+      position: fixed; bottom: -20px;
+      font-size: 26px;
       animation: floatUp 4s linear forwards;
-      pointer-events: none;
+      pointer-events:none;
+      z-index: 200;
+    }
+    @keyframes floatUp{
+      0%{ transform: translateY(0); opacity:1; }
+      100%{ transform: translateY(-110vh); opacity:0; }
     }
 
-    @keyframes floatUp {
-      0% { transform: translateY(0); opacity: 1; }
-      100% { transform: translateY(-110vh); opacity: 0; }
+    .errorBox{
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(176,0,32,0.10);
+      color: #b00020;
+      font-size: 13px;
+      display:none;
+      text-align:left;
+      word-break: break-word;
     }
   </style>
 </head>
+
 <body>
   <div class="card" id="card">
     <h1>Hey ❤️</h1>
+    <div class="filmTag">🎬 Now showing: <b>“Valentine: Director’s Cut”</b></div>
     <p>Will you be my Valentine?</p>
+
     <div class="buttons">
       <button id="yesBtn">Yes 😍</button>
       <button id="noBtn">No 🙈</button>
     </div>
+
+    <div class="hint">(The “No” button is doing cardio.)</div>
+    <div class="errorBox" id="err"></div>
   </div>
 
   <script>
-    const yesBtn = document.getElementById("yesBtn");
-    const noBtn = document.getElementById("noBtn");
-    const card = document.getElementById("card");
+    window.addEventListener("DOMContentLoaded", () => {
+      const card = document.getElementById("card");
+      const yesBtn = document.getElementById("yesBtn");
+      const noBtn = document.getElementById("noBtn");
+      const err = document.getElementById("err");
 
-    noBtn.addEventListener("mouseover", () => {
-      const x = Math.random() * 200 - 100;
-      const y = Math.random() * 200 - 100;
-      noBtn.style.transform = `translate(${x}px, ${y}px)`;
+      function showErr(msg){
+        err.style.display = "block";
+        err.textContent = msg;
+      }
+
+      if (!card || !yesBtn || !noBtn) {
+        showErr("Init error: missing elements. Re-check that buttons have id='yesBtn' and id='noBtn'.");
+        return;
+      }
+
+      function dodgeNoButton() {
+        const maxX = 220, maxY = 160;
+        const x = Math.floor(Math.random() * (maxX * 2 + 1)) - maxX;
+        const y = Math.floor(Math.random() * (maxY * 2 + 1)) - maxY;
+        noBtn.style.transform = `translate(${x}px, ${y}px)`;
+      }
+      noBtn.addEventListener("mouseover", dodgeNoButton);
+      noBtn.addEventListener("click", dodgeNoButton);
+
+      yesBtn.addEventListener("click", () => {
+        document.body.classList.add("cinema");
+
+        card.innerHTML = `
+          <h1>YAY. 💖</h1>
+          <p>You just triggered the <b>cinematic universe</b>.</p>
+
+          <div class="imgWrap">
+            <img src="./yes_img.jpg" class="yesImg" alt="This could be us"
+              onerror="document.getElementById('imgFail').style.display='block'; this.style.display='none';" />
+            <div id="imgFail" class="errorBox" style="display:none;">
+              Image not found at <b>./yes_img.jpg</b>. Make sure the file is next to index.html and the name matches exactly.
+            </div>
+
+            <div class="tagline">This cud be us 😌🎥</div>
+            <div class="caption">
+              Two main characters. One plot twist. Unlimited sequels.<br/>
+              (Also: snacks will be provided. Non-negotiable.)
+            </div>
+
+            <div class="badge">🎬 Cinematic mode: ON</div>
+          </div>
+        `;
+
+        burstHearts(24);
+      });
+
+      function burstHearts(count){
+        for(let i=0;i<count;i++){
+          setTimeout(() => {
+            const h = document.createElement("div");
+            h.className = "hearts";
+            h.textContent = Math.random() > 0.3 ? "❤️" : "💘";
+            h.style.left = (Math.random() * 100) + "vw";
+            h.style.animationDuration = (2.8 + Math.random()*1.8) + "s";
+            document.body.appendChild(h);
+            setTimeout(() => h.remove(), 5000);
+          }, i * 35);
+        }
+      }
     });
-
-    yesBtn.addEventListener("click", () => {
-      card.innerHTML = `
-        <h1>Yay! 💖</h1>
-        <p>You just made my day! Happy Valentine’s! 🌹</p>
-      `;
-      spawnHearts();
-    });
-
-    function spawnHearts() {
-      setInterval(() => {
-        const heart = document.createElement("div");
-        heart.className = "hearts";
-        heart.innerText = "❤️";
-        heart.style.left = Math.random() * 100 + "vw";
-        heart.style.animationDuration = (3 + Math.random() * 2) + "s";
-        document.body.appendChild(heart);
-
-        setTimeout(() => {
-          heart.remove();
-        }, 5000);
-      }, 300);
-    }
   </script>
 </body>
 </html>
